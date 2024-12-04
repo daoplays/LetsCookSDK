@@ -1,0 +1,126 @@
+# useGetBalance
+
+A React hook that provides real-time balance updates for a Solana account.
+
+## Installation
+
+```bash
+npm install @letscook/sdk
+```
+
+## Import
+
+```typescript
+import { useGetBalance } from "@letscook/sdk";
+```
+
+## Usage
+
+```typescript
+import { Connection, PublicKey } from '@solana/web3.js';
+import { useGetBalance } from '@letscook/sdk';
+
+function AccountBalance({ address }: { address: string }) {
+  const connection = new Connection('https://api.mainnet-beta.solana.com');
+  const publicKey = new PublicKey(address);
+
+  const { balance, error, isLoading } = useGetBalance({
+    publicKey,
+    connection
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return <div>Balance: {balance} SOL</div>;
+}
+```
+
+## Parameters
+
+The hook accepts an object with the following properties:
+
+| Parameter  | Type                | Required | Description                          |
+| ---------- | ------------------- | -------- | ------------------------------------ |
+| publicKey  | `PublicKey \| null` | Yes      | The Solana public key to monitor     |
+| connection | `Connection`        | Yes      | A Solana web3.js Connection instance |
+
+## Returns
+
+The hook returns an object with the following properties:
+
+| Property  | Type             | Description                                           |
+| --------- | ---------------- | ----------------------------------------------------- |
+| balance   | `number`         | The current balance in SOL                            |
+| error     | `string \| null` | Error message if something went wrong, null otherwise |
+| isLoading | `boolean`        | True while the initial balance is being fetched       |
+
+## Features
+
+- Real-time balance updates using Solana's WebSocket subscription
+- Automatic cleanup of WebSocket connections on unmount
+- Error handling and loading states
+- Balance converted from lamports to SOL automatically
+
+## Examples
+
+### Basic Usage
+
+```typescript
+const { balance } = useGetBalance({
+    publicKey,
+    connection,
+});
+```
+
+### With Error Handling
+
+```typescript
+const { balance, error, isLoading } = useGetBalance({
+    publicKey,
+    connection,
+});
+
+if (error) {
+    console.error("Failed to fetch balance:", error);
+}
+```
+
+### With Multiple Accounts
+
+```typescript
+function MultipleBalances({ addresses }: { addresses: string[] }) {
+  const connection = new Connection('https://api.mainnet-beta.solana.com');
+
+  return (
+    <div>
+      {addresses.map(address => (
+        <div key={address}>
+          <Balance
+            publicKey={new PublicKey(address)}
+            connection={connection}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Balance({ publicKey, connection }) {
+  const { balance, error, isLoading } = useGetBalance({
+    publicKey,
+    connection
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return <div>{balance} SOL</div>;
+}
+```
+
+## Notes
+
+- The hook automatically handles WebSocket cleanup when the component unmounts
+- If `publicKey` is null, the balance will be set to 0 and isLoading to false
+- The balance is automatically converted from lamports (1e9) to SOL
