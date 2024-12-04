@@ -1,0 +1,43 @@
+{
+    "name": "@letscook/sdk",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/daoplays/LetsCookSDK.git"
+    },
+    "files": ["dist"],
+    "scripts": {
+      "build": "tsc",
+      "dev": "tsc -w",
+      "lint": "eslint src/**/*.{ts,tsx}",
+      "format": "prettier --check --ignore-path .gitignore .",
+      "format:fix": "prettier --write --ignore-path .gitignore .",
+      "prepare": "npm run build"
+    },
+    "dependencies": {
+      "@solana/web3.js": "^1.87.1",
+      "@solana/wallet-adapter-react": "^0.15.35",
+      "@solana/wallet-adapter-base": "^0.9.23",
+      
+      "@metaplex-foundation/js": "^0.19.5",
+      "@metaplex-foundation/umi": "^0.9.1",
+      
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    },
+    "peerDependencies": {
+      "react": ">=16.8.0",
+      "react-dom": ">=16.8.0",
+      "@solana/web3.js": ">=1.0.0"
+    },
+    "devDependencies": {
+      "@types/react": "^18.2.28",
+      "@types/node": "^20.8.4",
+      "typescript": "^5.2.2",
+      "eslint": "^8.51.0",
+      "prettier": "^3.3.3",
+      "tsup": "^7.2.0"
+    }
+}
