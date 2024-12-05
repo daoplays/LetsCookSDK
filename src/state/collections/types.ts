@@ -220,4 +220,8 @@ export class CollectionData {
             ),
         "CollectionData",
     );
+
+    static deserialize(buffer: Buffer): CollectionData {
+        return this.struct.deserialize(buffer)[0];
+    }
 }

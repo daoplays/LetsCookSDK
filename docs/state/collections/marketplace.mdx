@@ -1,0 +1,48 @@
+# Marketplace Types
+
+## MarketplaceSummary
+
+```typescript
+import { MarketplaceSummary } from '@letscook/sdk';
+
+// From buffer
+const summary = MarketplaceSummary.deserialize(accountData);
+
+```
+
+### Properties
+| Property | Type | Description |
+|----------|------|-------------|
+| num_listings | `number` | Total number of active listings |
+
+
+## NewNFTListingData
+
+```typescript
+import { NewNFTListingData } from '@letscook/sdk';
+
+const listing = new NewNFTListingData(
+  collectionPublicKey,
+  assetPublicKey,
+  sellerPublicKey,
+  BigInt(1000000000)
+);
+
+const buffer = NewNFTListingData.serialize(listing);
+const deserialized = NewNFTListingData.deserialize(buffer);
+```
+
+### Properties
+| Property | Type | Description |
+|----------|------|-------------|
+| collection | `PublicKey` | Collection address |
+| asset | `PublicKey` | NFT mint address |
+| seller | `PublicKey` | Seller's wallet address |
+| price | `bigint` | Listing price in lamports |
+
+## Methods
+
+Each class includes:
+
+### static deserialize(buffer: Buffer)
+Converts account data buffer into class instance.
