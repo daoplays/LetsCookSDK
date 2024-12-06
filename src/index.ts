@@ -1,1 +1,1 @@
-export * from './hooks/data';
+export * from "./hooks/data";

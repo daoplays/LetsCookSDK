@@ -4,58 +4,59 @@ A class representing on-chain collection data for NFT collections.
 
 ## Properties
 
-| Property | Type | Description |
-|----------|------|-------------|
-| account_type | `number` | Type identifier for the account |
-| launch_id | `bigint` | Unique identifier for the collection launch |
-| collection_meta | `CollectionMetaEnum` | Collection metadata type (RandomFixedSupply or RandomUnlimited) |
-| plugins | `CollectionPluginEnum[]` | Array of collection plugins |
-| collection_name | `string` | Name of the collection |
-| collection_symbol | `string` | Symbol for the collection |
-| collection_icon_url | `string` | URL to collection icon |
-| collection_meta_url | `string` | URL to collection metadata |
-| token_name | `string` | Name of the associated token |
-| token_symbol | `string` | Symbol of the associated token |
-| token_icon_url | `string` | URL to token icon |
-| token_decimals | `number` | Number of decimal places for token |
-| token_extensions | `number` | Token extensions flags |
-| nft_icon_url | `string` | URL to NFT icon |
-| nft_meta_url | `string` | URL to NFT metadata |
-| nft_name | `string` | Name template for NFTs |
-| nft_type | `string` | Type of NFTs in collection |
-| banner | `string` | URL to collection banner |
-| page_name | `string` | Collection page name |
-| description | `string` | Collection description |
-| total_supply | `number` | Total supply of items |
-| num_available | `number` | Number of items available |
-| swap_price | `bigint` | Price for swapping in lamports |
-| swap_fee | `number` | Fee for swapping |
-| positive_votes | `number` | Number of positive votes |
-| negative_votes | `number` | Number of negative votes |
-| total_mm_buy_amount | `bigint` | Total market maker buy amount |
-| total_mm_sell_amount | `bigint` | Total market maker sell amount |
-| last_mm_reward_date | `number` | Last market maker reward timestamp |
-| socials | `string[]` | Array of social media links |
-| flags | `number[]` | Array of feature flags |
-| strings | `string[]` | Array of additional strings |
-| keys | `PublicKey[]` | Array of related Solana public keys |
+| Property             | Type                     | Description                                                     |
+| -------------------- | ------------------------ | --------------------------------------------------------------- |
+| account_type         | `number`                 | Type identifier for the account                                 |
+| launch_id            | `bigint`                 | Unique identifier for the collection launch                     |
+| collection_meta      | `CollectionMetaEnum`     | Collection metadata type (RandomFixedSupply or RandomUnlimited) |
+| plugins              | `CollectionPluginEnum[]` | Array of collection plugins                                     |
+| collection_name      | `string`                 | Name of the collection                                          |
+| collection_symbol    | `string`                 | Symbol for the collection                                       |
+| collection_icon_url  | `string`                 | URL to collection icon                                          |
+| collection_meta_url  | `string`                 | URL to collection metadata                                      |
+| token_name           | `string`                 | Name of the associated token                                    |
+| token_symbol         | `string`                 | Symbol of the associated token                                  |
+| token_icon_url       | `string`                 | URL to token icon                                               |
+| token_decimals       | `number`                 | Number of decimal places for token                              |
+| token_extensions     | `number`                 | Token extensions flags                                          |
+| nft_icon_url         | `string`                 | URL to NFT icon                                                 |
+| nft_meta_url         | `string`                 | URL to NFT metadata                                             |
+| nft_name             | `string`                 | Name template for NFTs                                          |
+| nft_type             | `string`                 | Type of NFTs in collection                                      |
+| banner               | `string`                 | URL to collection banner                                        |
+| page_name            | `string`                 | Collection page name                                            |
+| description          | `string`                 | Collection description                                          |
+| total_supply         | `number`                 | Total supply of items                                           |
+| num_available        | `number`                 | Number of items available                                       |
+| swap_price           | `bigint`                 | Price for swapping in lamports                                  |
+| swap_fee             | `number`                 | Fee for swapping                                                |
+| positive_votes       | `number`                 | Number of positive votes                                        |
+| negative_votes       | `number`                 | Number of negative votes                                        |
+| total_mm_buy_amount  | `bigint`                 | Total market maker buy amount                                   |
+| total_mm_sell_amount | `bigint`                 | Total market maker sell amount                                  |
+| last_mm_reward_date  | `number`                 | Last market maker reward timestamp                              |
+| socials              | `string[]`               | Array of social media links                                     |
+| flags                | `number[]`               | Array of feature flags                                          |
+| strings              | `string[]`               | Array of additional strings                                     |
+| keys                 | `PublicKey[]`            | Array of related Solana public keys                             |
 
 ## Methods
 
 ### static deserialize(buffer: Buffer): CollectionData
+
 Deserializes account data into a CollectionData instance.
 
 ## Usage
 
 ```typescript
-import { Connection, PublicKey } from '@solana/web3.js';
-import { CollectionData } from '@letscook/sdk';
+import { Connection, PublicKey } from "@solana/web3.js";
+import { CollectionData } from "@letscook/sdk";
 
 // Fetching collection data
 async function getCollection(connection: Connection, address: PublicKey) {
     const accountInfo = await connection.getAccountInfo(address);
     if (!accountInfo) return null;
-    
+
     return CollectionData.deserialize(accountInfo.data);
 }
 
@@ -77,7 +78,7 @@ if (pluginData.whitelistKey) {
 }
 
 // Check marketplace listings
-pluginData.listings.forEach(listing => {
+pluginData.listings.forEach((listing) => {
     console.log(`NFT listed at ${listing.price} lamports`);
 });
 ```
@@ -87,19 +88,25 @@ pluginData.listings.forEach(listing => {
 The collection can have various plugins enabled:
 
 ### AsymmetricSwapPrice
+
 Custom return swap price configuration.
 
 ### MintProbability
+
 Chance-based minting with specified probability.
 
 ### Whitelist
+
 Gated access with:
+
 - Required token
 - Required amount
 - Time-based phases
 
 ### MintOnly
+
 Collection that only allows minting, no swapping.
 
 ### Marketplace
+
 NFT marketplace functionality with listings.

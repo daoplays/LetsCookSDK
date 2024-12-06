@@ -1,9 +1,8 @@
-import { PublicKey } from '@solana/web3.js';
-import { NFTListingData } from './marketplace';
-import { CollectionData } from './types';
-import { bignum_to_num } from '../../utils';
-import { bignum } from '@metaplex-foundation/beet';
-
+import { PublicKey } from "@solana/web3.js";
+import { NFTListingData } from "./marketplace";
+import { CollectionData } from "./types";
+import { bignum_to_num } from "../../utils";
+import { bignum } from "@metaplex-foundation/beet";
 
 export interface CollectionPluginData {
     // mint probability
@@ -20,7 +19,6 @@ export interface CollectionPluginData {
     // listings
     listings: NFTListingData[];
 }
-
 
 export function getCollectionPlugins(collection: CollectionData): CollectionPluginData {
     const initialData: CollectionPluginData = {

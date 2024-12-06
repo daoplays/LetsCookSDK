@@ -1,4 +1,4 @@
-import { PublicKey} from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import {
     FixableBeetStruct,
     u8,
@@ -16,8 +16,6 @@ import {
 } from "@metaplex-foundation/beet";
 import { publicKey } from "@metaplex-foundation/beet-solana";
 import { NFTListingData } from "./marketplace";
-
-
 
 type CollectionPluginEnum = {
     AsymmetricSwapPrice: {
@@ -80,12 +78,8 @@ const collectionInfoBeet = dataEnum<CollectionMetaEnum>([
             'CollectionMetaEnum["RandomFixedSupply"]',
         ),
     ],
-    [
-        "RandomUnlimited",
-        new BeetArgsStruct([], 'CollectionMetaEnum["RandomUnlimited"]'),
-    ],
+    ["RandomUnlimited", new BeetArgsStruct([], 'CollectionMetaEnum["RandomUnlimited"]')],
 ]) as FixableBeet<CollectionInfo>;
-
 
 export class CollectionData {
     constructor(

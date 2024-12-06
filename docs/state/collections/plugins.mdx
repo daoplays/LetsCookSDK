@@ -3,7 +3,9 @@
 ## Types
 
 ### CollectionPluginEnum
+
 Defines available plugin types:
+
 - `AsymmetricSwapPrice`: Custom return swap price
 - `MintProbability`: Chance-based minting
 - `Whitelist`: Gated access with time phase
@@ -11,15 +13,16 @@ Defines available plugin types:
 - `Marketplace`: NFT listings
 
 ### CollectionPluginData
+
 Processed plugin data with normalized types:
 
 ```typescript
 interface CollectionPluginData {
-    probability: string;        // Human-readable mint probability
-    whitelistKey: PublicKey;   // Whitelist token mint
-    whitelistAmount: bigint;   // Required token amount
-    whitelistPhaseEnd: Date;   // Phase end timestamp
-    mintOnly: boolean;         // Mint-only flag
+    probability: string; // Human-readable mint probability
+    whitelistKey: PublicKey; // Whitelist token mint
+    whitelistAmount: bigint; // Required token amount
+    whitelistPhaseEnd: Date; // Phase end timestamp
+    mintOnly: boolean; // Mint-only flag
     listings: NFTListingData[]; // Active marketplace listings
 }
 ```
@@ -27,7 +30,7 @@ interface CollectionPluginData {
 ## Usage
 
 ```typescript
-import { getCollectionPlugins } from '@letscook/sdk';
+import { getCollectionPlugins } from "@letscook/sdk";
 
 const plugins = getCollectionPlugins(collectionData);
 
