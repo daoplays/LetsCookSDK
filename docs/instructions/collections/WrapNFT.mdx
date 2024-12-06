@@ -1,0 +1,68 @@
+# WrapNFT Instruction
+
+The WrapNFT instruction allows users to wrap (lock) their NFT from a specific collection in exchange for tokens. If no specific NFT is provided, the instruction will randomly select one from the user's owned NFTs in the collection.
+
+## Account Structure
+
+| Index | Name                        | Type                   | Properties           | Seeds                                           |
+| ----- | --------------------------- | ---------------------- | -------------------- | ----------------------------------------------- |
+| 0     | User Wallet                 | PublicKey             | isSigner, isWritable | -                                               |
+| 1     | User Data Account           | PDA                   | isWritable          | `[user_wallet.toBytes(), "User"]`               |
+| 2     | Launch Data Account         | PDA                   | isWritable          | `[page_name, "Collection"]`                      |
+| 3     | Program SOL Account         | PDA                   | isWritable          | `[SOL_ACCOUNT_SEED]`                            |
+| 4     | Token Mint                  | PublicKey             | isWritable          | -                                               |
+| 5     | User Token Account          | AssociatedTokenAccount| isWritable          | -                                               |
+| 6     | PDA Token Account          | AssociatedTokenAccount | isWritable          | -                                               |
+| 7     | Team Token Account         | AssociatedTokenAccount | isWritable          | -                                               |
+| 8     | Wrapped NFT Account         | PublicKey             | isWritable          | -                                               |
+| 9     | Collection Mint             | PublicKey             | isWritable          | -                                               |
+| 10    | Token Program               | Program               | -                    | -                                               |
+| 11    | ASSOCIATED_TOKEN_PROGRAM_ID | Program               | -                    | -                                               |
+| 12    | System Program              | Program               | -                    | -                                               |
+| 13    | Core Program               | Program               | -                    | -                                               |
+
+## Optional Transfer Hook Accounts
+
+If the token has a transfer hook, these additional accounts are required:
+
+| Index | Name                     | Type    | Properties | Seeds                                 |
+| ----- | ------------------------ | ------- | ---------- | ------------------------------------- |
+| 14    | Transfer Hook Program    | Program | isWritable | -                                     |
+| 15    | Transfer Hook Validation | PDA     | isWritable | `["extra-account-metas", token_mint]` |
+| 16+   | Extra Hook Accounts      | Various | Various    | Determined by transfer hook           |
+
+## Instruction Data
+
+| Field      | Type | Description           |
+| ---------- | ---- | --------------------- |
+| instruction| u8   | Instruction index for wrap_nft |
+
+## Implementation Details
+
+The instruction performs the following operations:
+
+1. If no specific NFT is provided (`asset_key === null`):
+   - Queries all NFTs from the collection owned by the user
+   - Randomly selects one NFT from the valid assets
+   - Uses the selected NFT's public key as the `wrapped_nft_key`
+
+2. Derives all necessary PDAs and associated token accounts
+
+3. If the token has a transfer hook:
+   - Derives the transfer hook validation account
+   - Resolves any extra account metas required by the hook
+   - Adds these accounts to the instruction
+
+4. Creates and returns the transaction instruction with the serialized instruction data
+
+## Usage Example
+
+```typescript
+const instruction = await GetWrapNFTInstruction(
+    collectionData,
+    mintData,
+    userPublicKey,
+    null, // Random NFT selection
+    connection
+);
+```
