@@ -33,3 +33,10 @@ export const enum LaunchInstruction {
     unlist_nft = 31,
     buy_nft = 32,
 }
+
+export const Extensions = {
+    None: 0,
+    TransferFee: 1,
+    PermanentDelegate: 2,
+    TransferHook: 4,
+};

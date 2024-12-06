@@ -1,5 +1,7 @@
 import { bignum } from "@metaplex-foundation/beet";
+import { Connection } from "@solana/web3.js";
 import BN from "bn.js";
+import { ECLIPSE_GENESIS, EclipseMainNetConfig, MainNetConfig, NetworkConfig } from "../components/constants";
 
 export function bignum_to_num(bn: bignum): number {
     let value = new BN(bn).toNumber();
@@ -26,4 +28,38 @@ export function uInt32ToLEBytes(num: number): Buffer {
     bytes.writeUInt32LE(num);
 
     return bytes;
+}
+
+export async function fetchWithTimeout(resource: string, timeout: number) {
+    const options = { timeout: timeout };
+
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    const response = await fetch(resource, {
+        ...options,
+        signal: controller.signal,
+    });
+    clearTimeout(id);
+
+    return response;
+}
+
+export async function getGenesisHash(connection: Connection): Promise<string> {
+    const genesisHash = await connection.getGenesisHash();
+
+    return genesisHash;
+}
+
+export async function onEclipse(connection: Connection): Promise<boolean> {
+    let genesis = await getGenesisHash(connection);
+    if (genesis === ECLIPSE_GENESIS) return true;
+    return false;
+}
+
+export async function getNetworkConfig(connection: Connection): Promise<NetworkConfig> {
+    let eclipse = await onEclipse(connection);
+    if (eclipse) return EclipseMainNetConfig;
+
+    return MainNetConfig;
 }
