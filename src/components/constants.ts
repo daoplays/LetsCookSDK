@@ -36,7 +36,7 @@ export const EclipseMainNetConfig: NetworkConfig = {
     RAYDIUM_FEES: new PublicKey("3XMrhbv989VxAMi3DErLV9eJht1pHppW5LbKxe9fkEFR"),
     COOK_FEES: new PublicKey("FxVpjJ5AGY6cfCwZQP5v8QBfS4J2NPa62HbGh1Fu2LpD"),
     token: "ETH",
-    token_image: "/images/eth.png",
+    token_image: "https://raw.githubusercontent.com/daoplays/LetsCookSDK/main/src/assets/images/eth.png",
     platform_fee: "0.0001",
 };
 
@@ -47,7 +47,7 @@ export const DevNetConfig: NetworkConfig = {
     RAYDIUM_FEES: new PublicKey("3XMrhbv989VxAMi3DErLV9eJht1pHppW5LbKxe9fkEFR"),
     COOK_FEES: new PublicKey("FxVpjJ5AGY6cfCwZQP5v8QBfS4J2NPa62HbGh1Fu2LpD"),
     token: "SOL",
-    token_image: "/images/sol.png",
+    token_image: "https://raw.githubusercontent.com/daoplays/LetsCookSDK/main/src/assets/images/sol.png",
     platform_fee: "0.002",
 };
 
@@ -58,6 +58,6 @@ export const MainNetConfig: NetworkConfig = {
     RAYDIUM_FEES: new PublicKey("7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5"),
     COOK_FEES: new PublicKey("HtszJ5ntXnwUFc2anMzp5RgaPxtvTFojL2qb5kcFEytA"),
     token: "SOL",
-    token_image: "/images/sol.png",
+    token_image: "https://raw.githubusercontent.com/daoplays/LetsCookSDK/main/src/assets/images/sol.png",
     platform_fee: "0.002",
 };
