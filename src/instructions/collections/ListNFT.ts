@@ -1,15 +1,10 @@
-
-import {
-    PublicKey,
-    TransactionInstruction,
-} from "@solana/web3.js";
+import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { PROGRAM, SYSTEM_KEY, SOL_ACCOUNT_SEED, CORE } from "../../components/constants";
 import { BeetStruct, bignum, u64, u8 } from "@metaplex-foundation/beet";
 import { LaunchInstruction } from "../../state/common/enums";
 import { CollectionData } from "../../state/collections";
 import { uInt32ToLEBytes } from "../../utils";
 import { CollectionKeys } from "../../state/collections/enums";
-
 
 function serialise_list_nft_instruction(price: number): Buffer {
     const data = new ListNFT_Instruction(LaunchInstruction.list_nft, price);
@@ -67,6 +62,6 @@ export const GetListInstructions = async (launchData: CollectionData, user: Publ
         programId: PROGRAM,
         data: instruction_data,
     });
-    
+
     return list_instruction;
 };

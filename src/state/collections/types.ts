@@ -219,3 +219,39 @@ export class CollectionData {
         return this.struct.deserialize(buffer)[0];
     }
 }
+
+export class AssignmentData {
+    constructor(
+        readonly account_type: number,
+        readonly nft_address: PublicKey,
+        readonly random_address: PublicKey,
+        readonly nft_index: number,
+        readonly status: number,
+        readonly num_interations: number,
+    ) {}
+
+    static readonly struct = new FixableBeetStruct<AssignmentData>(
+        [
+            ["account_type", u8],
+            ["nft_address", publicKey],
+            ["random_address", publicKey],
+            ["nft_index", u32],
+            ["status", u8],
+            ["num_interations", u32],
+        ],
+        (args) =>
+            new AssignmentData(
+                args.account_type!,
+                args.nft_address!,
+                args.random_address!,
+                args.nft_index!,
+                args.status!,
+                args.num_interations!,
+            ),
+        "AssignmentData",
+    );
+
+    static deserialize(buffer: Buffer): AssignmentData {
+        return this.struct.deserialize(buffer)[0];
+    }
+}

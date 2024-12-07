@@ -1,8 +1,4 @@
-import {
-    Connection,
-    PublicKey,
-    TransactionInstruction,
-} from "@solana/web3.js";
+import { Connection, PublicKey, TransactionInstruction } from "@solana/web3.js";
 import { PROGRAM, SYSTEM_KEY, SOL_ACCOUNT_SEED, CORE } from "../../components/constants";
 import { toast } from "react-toastify";
 import { BeetStruct, u32, u8 } from "@metaplex-foundation/beet";
@@ -35,7 +31,13 @@ class BuyNFT_Instruction {
     );
 }
 
-export const GetBuyNFTInstructions = async (connection :Connection, launchData: CollectionData, user: PublicKey, asset_key: PublicKey, index: number) => {
+export const GetBuyNFTInstructions = async (
+    connection: Connection,
+    launchData: CollectionData,
+    user: PublicKey,
+    asset_key: PublicKey,
+    index: number,
+) => {
     let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
     let launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
