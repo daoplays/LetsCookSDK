@@ -1,7 +1,7 @@
 import { bignum } from "@metaplex-foundation/beet";
 import { Connection } from "@solana/web3.js";
 import BN from "bn.js";
-import { ECLIPSE_GENESIS, EclipseMainNetConfig, MainNetConfig, NetworkConfig } from "../components/constants";
+import { DevNetConfig, ECLIPSE_GENESIS, EclipseMainNetConfig, MainNetConfig, NetworkConfig, SOLANA_DEVNET_GENESIS } from "../components/constants";
 
 export function bignum_to_num(bn: bignum): number {
     let value = new BN(bn).toNumber();
@@ -58,8 +58,9 @@ export async function onEclipse(connection: Connection): Promise<boolean> {
 }
 
 export async function getNetworkConfig(connection: Connection): Promise<NetworkConfig> {
-    let eclipse = await onEclipse(connection);
-    if (eclipse) return EclipseMainNetConfig;
+    let hash = await getGenesisHash(connection);
+    if (hash === ECLIPSE_GENESIS) return EclipseMainNetConfig;
+    if (hash === SOLANA_DEVNET_GENESIS) return DevNetConfig;
 
     return MainNetConfig;
 }
