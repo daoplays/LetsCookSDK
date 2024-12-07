@@ -69,7 +69,7 @@ class ClaimNFT_Instruction {
     );
 }
 
-export const GetClaimNFTInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) => {
+export const GetClaimNFTInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
     let nft_assignment_account = PublicKey.findProgramAddressSync(
         [user.toBytes(), collectionData.keys[CollectionKeys.CollectionMint].toBytes(), Buffer.from("assignment")],
         PROGRAM,
@@ -77,16 +77,16 @@ export const GetClaimNFTInstruction = async (connection: Connection, collectionD
 
     if (collectionData.num_available === 0) {
         toast.error("No NFTs available");
-        return;
+        return null;
     }
 
     if (user.toString() == collectionData.keys[CollectionKeys.Seller].toString()) {
         alert("Launch creator cannot buy NFTs");
-        return;
+        return null;
     }
 
     if (collectionData === null) {
-        return;
+        return null;
     }
 
     let launch_data_account = PublicKey.findProgramAddressSync(
@@ -101,7 +101,7 @@ export const GetClaimNFTInstruction = async (connection: Connection, collectionD
 
     if (!mint_info) {
         toast.error("Mint not found");
-        return;
+        return null;
     }
 
     let mint_account = mint_info.mint;
@@ -188,7 +188,7 @@ export const GetClaimNFTInstruction = async (connection: Connection, collectionD
         let whitelist = await getMintData(connection, whitelist_mint.toString());
         if (!whitelist) {
             toast.error("Whitelist mint not found");
-            return;
+            return null;
         }
         whitelist_account = await getAssociatedTokenAddress(
             whitelist_mint, // mint

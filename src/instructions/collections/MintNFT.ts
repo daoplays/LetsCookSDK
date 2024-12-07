@@ -27,10 +27,10 @@ class MintNFTInstruction {
     );
 }
 
-export const GetMintRandomInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) => {
+export const GetMintRandomInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
     if (collectionData === null) {
         //console.log("launch is null");
-        return;
+        return null;
     }
 
     let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
@@ -45,7 +45,7 @@ export const GetMintRandomInstruction = async (connection: Connection, collectio
 
     if (assignment_data === null) {
         toast.error("Assignment account not found");
-        return;
+        return null;
     }
 
     let assignment = AssignmentData.deserialize(assignment_data.data);
@@ -62,7 +62,7 @@ export const GetMintRandomInstruction = async (connection: Connection, collectio
 
     if (!mint_info) {
         toast.error("Mint not found");
-        return;
+        return null;
     }
 
     let user_token_account_key = await getAssociatedTokenAddress(

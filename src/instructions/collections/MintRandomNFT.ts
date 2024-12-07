@@ -28,9 +28,9 @@ class MintRandomNFT_Instruction {
     );
 }
 
-export const GetMintRandomInstruction = async (connection: Connection, collection: CollectionData, user: PublicKey) => {
+export const GetMintRandomInstruction = async (connection: Connection, collection: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
     if (collection === null) {
-        return;
+        return null;
     }
 
     let launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(collection.page_name), Buffer.from("Collection")], PROGRAM)[0];
@@ -46,7 +46,7 @@ export const GetMintRandomInstruction = async (connection: Connection, collectio
             isLoading: false,
             autoClose: 3000,
         });
-        return;
+        return null;
     }
 
     let user_token_account_key = await getAssociatedTokenAddress(
@@ -84,7 +84,7 @@ export const GetMintRandomInstruction = async (connection: Connection, collectio
             isLoading: false,
             autoClose: 3000,
         });
-        return;
+        return null;
     }
 
     let assignment = AssignmentData.deserialize(assignment_data.data);

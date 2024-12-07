@@ -37,7 +37,7 @@ export const GetBuyNFTInstructions = async (
     user: PublicKey,
     asset_key: PublicKey,
     index: number,
-) => {
+) : Promise<TransactionInstruction> => {
     let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
     let launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];

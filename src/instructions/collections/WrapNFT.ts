@@ -41,7 +41,7 @@ export const GetWrapNFTInstruction = async (
     user: PublicKey,
     asset_key: PublicKey | null,
     connection: Connection,
-) => {
+) : Promise<TransactionInstruction | null> => {
     let wrapped_nft_key: PublicKey;
 
     if (asset_key === null) {
@@ -64,7 +64,7 @@ export const GetWrapNFTInstruction = async (
         }
         if (valid_assets.length === 0) {
             console.log("no nfts owned by user");
-            return;
+            return null;
         }
 
         let wrapped_index = Math.floor(Math.random() * valid_assets.length);
