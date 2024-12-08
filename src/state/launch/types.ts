@@ -38,8 +38,8 @@ const launchPluginBeet = dataEnum<LaunchPluginEnum>([
 ]) as FixableBeet<LaunchPlugin>;
 
 type LaunchMetaEnum = {
-    Raffle: {};
-    FCFS: {};
+    Raffle: Record<never, never>;
+    FCFS: Record<never, never>;
     IDO: { fraction_distributed: number[]; tokens_distributed: bignum };
 };
 type LaunchInfo = DataEnumKeyAsKind<LaunchMetaEnum>;
@@ -155,5 +155,47 @@ export class LaunchData {
                 args.keys!,
             ),
         "LaunchData",
+    );
+}
+
+
+export class JoinData {
+    constructor(
+        readonly account_type: number,
+        readonly joiner_key: PublicKey,
+        readonly page_name: string,
+        readonly num_tickets: number,
+        readonly num_claimed_tickets: number,
+        readonly num_winning_tickets: number,
+        readonly ticket_status: number,
+        readonly random_address: PublicKey,
+        readonly last_slot: bignum,
+    ) {}
+
+    static readonly struct = new FixableBeetStruct<JoinData>(
+        [
+            ["account_type", u8],
+            ["joiner_key", publicKey],
+            ["page_name", utf8String],
+            ["num_tickets", u16],
+            ["num_claimed_tickets", u16],
+            ["num_winning_tickets", u16],
+            ["ticket_status", u8],
+            ["random_address", publicKey],
+            ["last_slot", u64],
+        ],
+        (args) =>
+            new JoinData(
+                args.account_type!,
+                args.joiner_key!,
+                args.page_name!,
+                args.num_tickets!,
+                args.num_claimed_tickets!,
+                args.num_winning_tickets!,
+                args.ticket_status!,
+                args.random_address!,
+                args.last_slot!,
+            ),
+        "JoinData",
     );
 }

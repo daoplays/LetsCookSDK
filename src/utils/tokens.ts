@@ -33,7 +33,7 @@ export async function getMint(connection: Connection, mint_string: string): Prom
         // Attempt to create a PublicKey instance
         mint_address = new PublicKey(mint_string);
         // If no error is thrown, input is a valid public key
-    } catch (error) {
+    } catch {
         toast.error("Invalid public key", {
             type: "error",
             isLoading: false,
@@ -42,13 +42,13 @@ export async function getMint(connection: Connection, mint_string: string): Prom
         return [null, null];
     }
 
-    let result = await connection.getAccountInfo(mint_address, "confirmed");
+    const result = await connection.getAccountInfo(mint_address, "confirmed");
     let mint: Mint;
     if (result?.owner.equals(TOKEN_PROGRAM_ID)) {
         try {
             mint = unpackMint(mint_address, result, TOKEN_PROGRAM_ID);
             console.log(mint);
-        } catch (error) {
+        } catch {
             toast.error("Error loading spl token", {
                 type: "error",
                 isLoading: false,
@@ -60,7 +60,7 @@ export async function getMint(connection: Connection, mint_string: string): Prom
         try {
             mint = unpackMint(mint_address, result, TOKEN_2022_PROGRAM_ID);
             console.log(mint);
-        } catch (error) {
+        } catch {
             toast.error("Error loading token22", {
                 type: "error",
                 isLoading: false,
@@ -75,8 +75,8 @@ export async function getMint(connection: Connection, mint_string: string): Prom
 
 export async function getMintDataWithMint(connection: Connection, mint: Mint, token_program: PublicKey): Promise<MintData | null> {
     if (mint.address.equals(WRAPPED_SOL)) {
-        let config = await getNetworkConfig(connection);
-        let mint_data: MintData = {
+        const config = await getNetworkConfig(connection);
+        const mint_data: MintData = {
             mint: mint,
             uri: "",
             name: "Wrapped " + config.token,
@@ -101,22 +101,22 @@ export async function getMintDataWithMint(connection: Connection, mint: Mint, to
         //console.log("havemetadata pointer ",mint.address.toString(),  metadata_pointer.metadataAddress.toString());
         const data = getExtensionData(ExtensionType.TokenMetadata, mint.tlvData);
         if (data) {
-            let metadata: TokenMetadata = unpack(data);
+            const metadata: TokenMetadata = unpack(data);
             //console.log(metadata)
             uri = metadata.uri;
             name = metadata.name;
             symbol = metadata.symbol;
         }
     } else {
-        let token_meta_key = PublicKey.findProgramAddressSync(
+        const token_meta_key = PublicKey.findProgramAddressSync(
             [Buffer.from("metadata"), METAPLEX_META.toBuffer(), mint.address.toBuffer()],
             METAPLEX_META,
         )[0];
-        let raw_meta_data = await connection.getAccountInfo(token_meta_key);
+        const raw_meta_data = await connection.getAccountInfo(token_meta_key);
 
         // if we also dont have metaplex metadata then just return with unknown metadata
         if (raw_meta_data === null) {
-            let mint_data: MintData = {
+            const mint_data: MintData = {
                 mint: mint,
                 uri: "",
                 name: "Unknown",
@@ -128,7 +128,7 @@ export async function getMintDataWithMint(connection: Connection, mint: Mint, to
             return mint_data;
         }
 
-        let meta_data = Metadata.deserialize(raw_meta_data.data);
+        const meta_data = Metadata.deserialize(raw_meta_data.data);
         //console.log(meta_data);
         //console.log(meta_data[0].data.symbol, meta_data[0].data.name);
         uri = meta_data[0].data.uri;
@@ -137,11 +137,11 @@ export async function getMintDataWithMint(connection: Connection, mint: Mint, to
     }
 
     // check the extensions we care about
-    let transfer_hook = getTransferHook(mint);
-    let transfer_fee_config = getTransferFeeConfig(mint);
-    let permanent_delegate = getPermanentDelegate(mint);
+    const transfer_hook = getTransferHook(mint);
+    const transfer_fee_config = getTransferFeeConfig(mint);
+    const permanent_delegate = getPermanentDelegate(mint);
 
-    let extensions =
+    const extensions =
         (Extensions.TransferFee * Number(transfer_fee_config !== null)) |
         (Extensions.PermanentDelegate * Number(permanent_delegate !== null)) |
         (Extensions.TransferHook * Number(transfer_hook !== null));
@@ -151,7 +151,7 @@ export async function getMintDataWithMint(connection: Connection, mint: Mint, to
     if (uri) {
         uri = uri.replace("https://cf-ipfs.com/", "https://gateway.moralisipfs.com/");
         try {
-            let uri_json = await fetchWithTimeout(uri, 3000).then((res) => res.json());
+            const uri_json = await fetchWithTimeout(uri, 3000).then((res) => res.json());
             //console.log(uri_json)
             icon = uri_json["image"];
         } catch (error) {
@@ -162,7 +162,7 @@ export async function getMintDataWithMint(connection: Connection, mint: Mint, to
         }
     }
 
-    let mint_data: MintData = {
+    const mint_data: MintData = {
         mint: mint,
         uri: uri ? uri : "",
         name: name,
@@ -177,13 +177,13 @@ export async function getMintDataWithMint(connection: Connection, mint: Mint, to
 }
 
 export async function getMintData(connection: Connection, token_mint: string): Promise<MintData | null> {
-    let [mint, token_program] = await getMint(connection, token_mint);
+    const [mint, token_program] = await getMint(connection, token_mint);
 
     if (!mint || !token_program) {
         return null;
     }
 
-    let mint_data = await getMintDataWithMint(connection, mint, token_program);
+    const mint_data = await getMintDataWithMint(connection, mint, token_program);
 
     return mint_data;
 }

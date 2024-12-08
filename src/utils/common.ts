@@ -4,7 +4,7 @@ import BN from "bn.js";
 import { DevNetConfig, ECLIPSE_GENESIS, EclipseMainNetConfig, MainNetConfig, NetworkConfig, SOLANA_DEVNET_GENESIS } from "../components/constants";
 
 export function bignum_to_num(bn: bignum): number {
-    let value = new BN(bn).toNumber();
+    const value = new BN(bn).toNumber();
 
     return value;
 }
@@ -52,13 +52,13 @@ export async function getGenesisHash(connection: Connection): Promise<string> {
 }
 
 export async function onEclipse(connection: Connection): Promise<boolean> {
-    let genesis = await getGenesisHash(connection);
+    const genesis = await getGenesisHash(connection);
     if (genesis === ECLIPSE_GENESIS) return true;
     return false;
 }
 
 export async function getNetworkConfig(connection: Connection): Promise<NetworkConfig> {
-    let hash = await getGenesisHash(connection);
+    const hash = await getGenesisHash(connection);
     if (hash === ECLIPSE_GENESIS) return EclipseMainNetConfig;
     if (hash === SOLANA_DEVNET_GENESIS) return DevNetConfig;
 

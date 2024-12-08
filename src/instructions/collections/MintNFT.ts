@@ -33,53 +33,53 @@ export const GetMintNFTInstruction = async (connection: Connection, collectionDa
         return null;
     }
 
-    let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
+    const program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
-    let nft_assignment_account = PublicKey.findProgramAddressSync(
+    const nft_assignment_account = PublicKey.findProgramAddressSync(
         [user.toBytes(), collectionData.keys[CollectionKeys.CollectionMint].toBytes(), Buffer.from("assignment")],
         PROGRAM,
     )[0];
 
     //console.log("get assignment data");
-    let assignment_data = await connection.getAccountInfo(nft_assignment_account);
+    const assignment_data = await connection.getAccountInfo(nft_assignment_account);
 
     if (assignment_data === null) {
         toast.error("Assignment account not found");
         return null;
     }
 
-    let assignment = AssignmentData.deserialize(assignment_data.data);
+    const assignment = AssignmentData.deserialize(assignment_data.data);
 
-    let asset_keypair = new Keypair();
+    const asset_keypair = new Keypair();
 
-    let launch_data_account = PublicKey.findProgramAddressSync(
+    const launch_data_account = PublicKey.findProgramAddressSync(
         [Buffer.from(collectionData.page_name), Buffer.from("Collection")],
         PROGRAM,
     )[0];
 
-    let token_mint = collectionData.keys[CollectionKeys.MintAddress];
-    let mint_info = await getMintData(connection, collectionData.keys[CollectionKeys.MintAddress].toString());
+    const token_mint = collectionData.keys[CollectionKeys.MintAddress];
+    const mint_info = await getMintData(connection, collectionData.keys[CollectionKeys.MintAddress].toString());
 
     if (!mint_info) {
         toast.error("Mint not found");
         return null;
     }
 
-    let user_token_account_key = await getAssociatedTokenAddress(
+    const user_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         user, // owner
         true, // allow owner off curve
         mint_info.token_program,
     );
 
-    let pda_token_account_key = await getAssociatedTokenAddress(
+    const pda_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         program_sol_account, // owner
         true, // allow owner off curve
         mint_info.token_program,
     );
 
-    let team_token_account_key = await getAssociatedTokenAddress(
+    const team_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         collectionData.keys[CollectionKeys.TeamWallet], // owner
         true, // allow owner off curve
@@ -88,7 +88,7 @@ export const GetMintNFTInstruction = async (connection: Connection, collectionDa
 
     const instruction_data = serialiseMintInstruction();
 
-    var account_vector = [
+    const account_vector = [
         { pubkey: user, isSigner: true, isWritable: true },
         { pubkey: nft_assignment_account, isSigner: false, isWritable: true },
 

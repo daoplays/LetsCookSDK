@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { AccountInfo, Connection, PublicKey } from "@solana/web3.js";
 import { MarketplaceSummary, NFTListingData, NewNFTListingData } from "../../state/collections";
 
 interface useMarketplaceProps {
@@ -85,10 +85,10 @@ const useMarketplace = (props: useMarketplaceProps) => {
                 ],
             });
 
-            let mp_listings = [];
-            for (let listing_data of listings) {
+            const mp_listings = [];
+            for (const listing_data of listings) {
                 const [listing] = NewNFTListingData.struct.deserialize(listing_data.account.data);
-                let old_listing = new NFTListingData(listing.asset, listing.seller, listing.price);
+                const old_listing = new NFTListingData(listing.asset, listing.seller, listing.price);
                 mp_listings.push(old_listing);
             }
             console.log("have listings", mp_listings);
@@ -100,7 +100,7 @@ const useMarketplace = (props: useMarketplaceProps) => {
             lastFetchTime.current = Date.now();
             isExecutingRef.current = false;
         }
-    }, [collectionAddress]);
+    }, [connection, collectionAddress]);
 
     // Function to fetch the current assignment data
     const fetchInitialMarketData = useCallback(async () => {
@@ -108,14 +108,14 @@ const useMarketplace = (props: useMarketplaceProps) => {
             return;
         }
 
-        let summary_account = getMarketplaceAccount();
+        const summary_account = getMarketplaceAccount();
 
         if (!summary_account) {
             return;
         }
         check_initial_collection.current = false;
 
-        let marketplace_summary = await connection.getAccountInfo(summary_account);
+        const marketplace_summary = await connection.getAccountInfo(summary_account);
 
         if (marketplace_summary === null) {
             return;
@@ -125,12 +125,12 @@ const useMarketplace = (props: useMarketplaceProps) => {
         setMarketplaceSummary(summary);
 
         fetchListings();
-    }, [getMarketplaceAccount, fetchListings]);
+    }, [connection, getMarketplaceAccount, fetchListings]);
 
     // Callback function to handle account changes
     const handleAccountChange = useCallback(
-        (accountInfo: any) => {
-            let account_data = Buffer.from(accountInfo.data, "base64");
+        (accountInfo: AccountInfo<Buffer>) => {
+            const account_data = accountInfo.data;
 
             if (account_data.length === 0) {
                 setMarketplaceSummary(null);

@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import { PROGRAM } from "../../components/constants";
 import { getTransferFeeConfig, calculateFee } from "@solana/spl-token";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { AccountInfo, Connection, PublicKey } from "@solana/web3.js";
 import useMarketplace from "./useMarketplace";
 import { CollectionData } from "../../state/collections/types";
 import { CollectionPluginData, getCollectionPlugins } from "../../state/collections/plugins";
@@ -51,14 +51,14 @@ const useCollection = (props: useCollectionProps) => {
             return;
         }
 
-        let collection_account = getCollectionDataAccount();
+        const collection_account = getCollectionDataAccount();
 
         if (!collection_account) {
             return;
         }
         check_initial_collection.current = false;
 
-        let collection_data = await connection.getAccountInfo(collection_account);
+        const collection_data = await connection.getAccountInfo(collection_account);
 
         if (collection_data === null) {
             return;
@@ -68,14 +68,14 @@ const useCollection = (props: useCollectionProps) => {
         setCollection(collection);
         setCollectionMint(collection.keys[CollectionKeys.CollectionMint]);
 
-        let token = await getMintData(connection, collection.keys[CollectionKeys.MintAddress].toString());
+        const token = await getMintData(connection, collection.keys[CollectionKeys.MintAddress].toString());
 
         if (!token) {
             setError(`Collection or Mint for ${pageName} not found`);
             return;
         }
 
-        let plugins: CollectionPluginData = getCollectionPlugins(collection);
+        const plugins: CollectionPluginData = getCollectionPlugins(collection);
         //console.log("set plugins", plugins);
         setCollectionPlugins(plugins);
         setTokenMint(token);
@@ -88,32 +88,32 @@ const useCollection = (props: useCollectionProps) => {
 
         // if this isn't mint only we need to calculate the swap back amount
         if (!plugins.mintOnly) {
-            let transfer_fee_config = getTransferFeeConfig(token.mint);
-            let input_fee =
+            const transfer_fee_config = getTransferFeeConfig(token.mint);
+            const input_fee =
                 transfer_fee_config === null
                     ? 0
                     : Number(calculateFee(transfer_fee_config.newerTransferFee, BigInt(collection.swap_price.toString())));
-            let swap_price = bignum_to_num(collection.swap_price);
+            const swap_price = bignum_to_num(collection.swap_price);
 
-            let input_amount = swap_price - input_fee;
+            const input_amount = swap_price - input_fee;
 
-            let swap_fee = Math.floor((input_amount * collection.swap_fee) / 100 / 100);
+            const swap_fee = Math.floor((input_amount * collection.swap_fee) / 100 / 100);
 
-            let output = input_amount - swap_fee;
+            const output = input_amount - swap_fee;
 
-            let output_fee = transfer_fee_config === null ? 0 : Number(calculateFee(transfer_fee_config.newerTransferFee, BigInt(output)));
+            const output_fee = transfer_fee_config === null ? 0 : Number(calculateFee(transfer_fee_config.newerTransferFee, BigInt(output)));
 
-            let final_output = output - output_fee;
+            const final_output = output - output_fee;
 
             //console.log("actual input amount was",  input_fee, input_amount,  "fee",  swap_fee,  "output", output, "output fee", output_fee, "final output", final_output);
-            let out_amount = final_output / Math.pow(10, collection.token_decimals);
+            const out_amount = final_output / Math.pow(10, collection.token_decimals);
             setOutAmount(out_amount);
         }
-    }, [getCollectionDataAccount]);
+    }, [getCollectionDataAccount, connection, pageName]);
 
     // Callback function to handle account changes
-    const handleAccountChange = useCallback((accountInfo: any) => {
-        let account_data = Buffer.from(accountInfo.data, "base64");
+    const handleAccountChange = useCallback((accountInfo: AccountInfo<Buffer>) => {
+        const account_data = accountInfo.data;
 
         if (account_data.length === 0) {
             setCollection(null);
@@ -121,7 +121,7 @@ const useCollection = (props: useCollectionProps) => {
         }
 
         const [updated_data] = CollectionData.struct.deserialize(account_data);
-        let updated_plugins: CollectionPluginData = getCollectionPlugins(updated_data);
+        const updated_plugins: CollectionPluginData = getCollectionPlugins(updated_data);
 
         setCollection(updated_data);
         setCollectionPlugins(updated_plugins);

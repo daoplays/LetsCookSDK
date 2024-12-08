@@ -73,7 +73,7 @@ export const useGetBalance = ({ publicKey, connection }: UseGetBalanceProps): Ba
                 subscriptionRef.current = null;
             }
         };
-    }, [connection, publicKey, fetchBalance]);
+    }, [connection, publicKey, fetchBalance, handleAccountChange]);
 
     return { balance, error, isLoading };
 };

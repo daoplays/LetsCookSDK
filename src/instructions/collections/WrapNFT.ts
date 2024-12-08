@@ -47,14 +47,14 @@ export const GetWrapNFTInstruction = async (
     if (asset_key === null) {
         const umi = createUmi(connection.rpcEndpoint, "confirmed");
 
-        let collection_umiKey = publicKey(launchData.keys[CollectionKeys.CollectionMint].toString());
+        const collection_umiKey = publicKey(launchData.keys[CollectionKeys.CollectionMint].toString());
 
         const assets = await getAssetV1GpaBuilder(umi)
             .whereField("key", Key.AssetV1)
             .whereField("updateAuthority", updateAuthority("Collection", [collection_umiKey]))
             .getDeserialized();
 
-        let valid_assets: AssetV1[] = [];
+        const valid_assets: AssetV1[] = [];
         for (let i = 0; i < assets.length; i++) {
             if (assets[i].owner !== user.toString()) {
                 continue;
@@ -67,46 +67,46 @@ export const GetWrapNFTInstruction = async (
             return null;
         }
 
-        let wrapped_index = Math.floor(Math.random() * valid_assets.length);
+        const wrapped_index = Math.floor(Math.random() * valid_assets.length);
         wrapped_nft_key = new PublicKey(valid_assets[wrapped_index].publicKey.toString());
     } else {
         wrapped_nft_key = asset_key;
     }
 
-    let user_data_account = PublicKey.findProgramAddressSync([user.toBytes(), Buffer.from("User")], PROGRAM)[0];
+    const user_data_account = PublicKey.findProgramAddressSync([user.toBytes(), Buffer.from("User")], PROGRAM)[0];
 
-    let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
+    const program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
-    let launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
+    const launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
 
-    let token_mint = launchData.keys[CollectionKeys.MintAddress];
+    const token_mint = launchData.keys[CollectionKeys.MintAddress];
 
-    let user_token_account_key = await getAssociatedTokenAddress(
+    const user_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         user, // owner
         true, // allow owner off curve
         mint_account.token_program,
     );
 
-    let pda_token_account_key = await getAssociatedTokenAddress(
+    const pda_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         program_sol_account, // owner
         true, // allow owner off curve
         mint_account.token_program,
     );
 
-    let team_token_account_key = await getAssociatedTokenAddress(
+    const team_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         launchData.keys[CollectionKeys.TeamWallet], // owner
         true, // allow owner off curve
         mint_account.token_program,
     );
 
-    let transfer_hook = getTransferHook(mint_account.mint);
+    const transfer_hook = getTransferHook(mint_account.mint);
 
     let transfer_hook_program_account: PublicKey | null = null;
     let transfer_hook_validation_account: PublicKey | null = null;
-    let extra_hook_accounts: AccountMeta[] = [];
+    const extra_hook_accounts: AccountMeta[] = [];
     if (transfer_hook !== null) {
         transfer_hook_program_account = transfer_hook.programId;
         transfer_hook_validation_account = PublicKey.findProgramAddressSync(
@@ -115,13 +115,13 @@ export const GetWrapNFTInstruction = async (
         )[0];
 
         // check if the validation account exists
-        let hook_accounts = await connection.getAccountInfo(transfer_hook_validation_account);
+        const hook_accounts = await connection.getAccountInfo(transfer_hook_validation_account);
 
         if (hook_accounts) {
-            let extra_account_metas = ExtraAccountMetaAccountDataLayout.decode(Uint8Array.from(hook_accounts.data));
+            const extra_account_metas = ExtraAccountMetaAccountDataLayout.decode(Uint8Array.from(hook_accounts.data));
             for (let i = 0; i < extra_account_metas.extraAccountsList.count; i++) {
-                let extra = extra_account_metas.extraAccountsList.extraAccounts[i];
-                let meta = await resolveExtraAccountMeta(
+                const extra = extra_account_metas.extraAccountsList.extraAccounts[i];
+                const meta = await resolveExtraAccountMeta(
                     connection,
                     extra,
                     extra_hook_accounts,
@@ -135,7 +135,7 @@ export const GetWrapNFTInstruction = async (
 
     const instruction_data = serialiseWrapInstruction();
 
-    var account_vector = [
+    const account_vector = [
         { pubkey: user, isSigner: true, isWritable: true },
         { pubkey: user_data_account, isSigner: false, isWritable: true },
 

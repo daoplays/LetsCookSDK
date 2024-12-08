@@ -31,19 +31,19 @@ class UnlistNFT_Instruction {
 }
 
 export const GetUnlistNFTInstruction = async (launchData: CollectionData, user: PublicKey, asset_key: PublicKey, index: number) : Promise<TransactionInstruction | null> => {
-    let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
+    const program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
-    let launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
-    let listings_program = new PublicKey("288fPpF7XGk82Wth2XgyoF2A82YKryEyzL58txxt47kd");
-    let listings_account = PublicKey.findProgramAddressSync([asset_key.toBytes(), Buffer.from("Listing")], listings_program)[0];
-    let listings_summary_account = PublicKey.findProgramAddressSync(
+    const launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
+    const listings_program = new PublicKey("288fPpF7XGk82Wth2XgyoF2A82YKryEyzL58txxt47kd");
+    const listings_account = PublicKey.findProgramAddressSync([asset_key.toBytes(), Buffer.from("Listing")], listings_program)[0];
+    const listings_summary_account = PublicKey.findProgramAddressSync(
         [launchData.keys[CollectionKeys.CollectionMint].toBytes(), Buffer.from("Summary")],
         listings_program,
     )[0];
 
     const instruction_data = serialise_unlist_nft_instruction(index);
 
-    var account_vector = [
+    const account_vector = [
         { pubkey: user, isSigner: true, isWritable: true },
         { pubkey: launch_data_account, isSigner: false, isWritable: true },
         { pubkey: program_sol_account, isSigner: false, isWritable: true },

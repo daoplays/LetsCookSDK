@@ -70,7 +70,7 @@ class ClaimNFT_Instruction {
 }
 
 export const GetClaimNFTInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
-    let nft_assignment_account = PublicKey.findProgramAddressSync(
+    const nft_assignment_account = PublicKey.findProgramAddressSync(
         [user.toBytes(), collectionData.keys[CollectionKeys.CollectionMint].toBytes(), Buffer.from("assignment")],
         PROGRAM,
     )[0];
@@ -89,46 +89,46 @@ export const GetClaimNFTInstruction = async (connection: Connection, collectionD
         return null;
     }
 
-    let launch_data_account = PublicKey.findProgramAddressSync(
+    const launch_data_account = PublicKey.findProgramAddressSync(
         [Buffer.from(collectionData.page_name), Buffer.from("Collection")],
         PROGRAM,
     )[0];
 
-    let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
+    const program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
-    let token_mint = collectionData.keys[CollectionKeys.MintAddress];
-    let mint_info = await getMintData(connection, collectionData.keys[CollectionKeys.MintAddress].toString());
+    const token_mint = collectionData.keys[CollectionKeys.MintAddress];
+    const mint_info = await getMintData(connection, collectionData.keys[CollectionKeys.MintAddress].toString());
 
     if (!mint_info) {
         toast.error("Mint not found");
         return null;
     }
 
-    let mint_account = mint_info.mint;
+    const mint_account = mint_info.mint;
 
-    let user_token_account_key = await getAssociatedTokenAddress(
+    const user_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         user, // owner
         true, // allow owner off curve
         mint_info.token_program,
     );
 
-    let pda_token_account_key = await getAssociatedTokenAddress(
+    const pda_token_account_key = await getAssociatedTokenAddress(
         token_mint, // mint
         program_sol_account, // owner
         true, // allow owner off curve
         mint_info.token_program,
     );
 
-    let token_destination_account = pda_token_account_key;
+    const token_destination_account = pda_token_account_key;
 
-    let user_data_account = PublicKey.findProgramAddressSync([user.toBytes(), Buffer.from("User")], PROGRAM)[0];
+    const user_data_account = PublicKey.findProgramAddressSync([user.toBytes(), Buffer.from("User")], PROGRAM)[0];
 
-    let transfer_hook = getTransferHook(mint_account);
+    const transfer_hook = getTransferHook(mint_account);
 
     let transfer_hook_program_account: PublicKey | null = null;
     let transfer_hook_validation_account: PublicKey | null = null;
-    let extra_hook_accounts: AccountMeta[] = [];
+    const extra_hook_accounts: AccountMeta[] = [];
     if (transfer_hook !== null) {
         transfer_hook_program_account = transfer_hook.programId;
         transfer_hook_validation_account = PublicKey.findProgramAddressSync(
@@ -137,13 +137,13 @@ export const GetClaimNFTInstruction = async (connection: Connection, collectionD
         )[0];
 
         // check if the validation account exists
-        let hook_accounts = await connection.getAccountInfo(transfer_hook_validation_account);
+        const hook_accounts = await connection.getAccountInfo(transfer_hook_validation_account);
 
         if (hook_accounts) {
-            let extra_account_metas = ExtraAccountMetaAccountDataLayout.decode(Uint8Array.from(hook_accounts.data));
+            const extra_account_metas = ExtraAccountMetaAccountDataLayout.decode(Uint8Array.from(hook_accounts.data));
             for (let i = 0; i < extra_account_metas.extraAccountsList.count; i++) {
-                let extra = extra_account_metas.extraAccountsList.extraAccounts[i];
-                let meta = await resolveExtraAccountMeta(
+                const extra = extra_account_metas.extraAccountsList.extraAccounts[i];
+                const meta = await resolveExtraAccountMeta(
                     connection,
                     extra,
                     extra_hook_accounts,
@@ -156,36 +156,36 @@ export const GetClaimNFTInstruction = async (connection: Connection, collectionD
     }
 
     let orao_program = PROGRAM;
-    let randomKey = new Keypair();
-    let key_bytes = randomKey.publicKey.toBytes();
+    const randomKey = new Keypair();
+    const key_bytes = randomKey.publicKey.toBytes();
 
-    let config = await getNetworkConfig(connection);
+    const config = await getNetworkConfig(connection);
 
     if (config.NETWORK !== "eclipse") {
         orao_program = new PublicKey("VRFzZoJdhFWL8rkvu87LpKM3RbcVezpMEc6X5GVDr7y");
     }
 
-    let orao_network = PublicKey.findProgramAddressSync([Buffer.from("orao-vrf-network-configuration")], orao_program)[0];
+    const orao_network = PublicKey.findProgramAddressSync([Buffer.from("orao-vrf-network-configuration")], orao_program)[0];
 
-    let orao_random = PublicKey.findProgramAddressSync([Buffer.from("orao-vrf-randomness-request"), key_bytes], orao_program)[0];
+    const orao_random = PublicKey.findProgramAddressSync([Buffer.from("orao-vrf-randomness-request"), key_bytes], orao_program)[0];
 
     let orao_treasury: PublicKey = SYSTEM_KEY;
     if (config.NETWORK !== "eclipse") {
-        let orao_network_data = await connection.getAccountInfo(orao_network);
+        const orao_network_data = await connection.getAccountInfo(orao_network);
         if (orao_network_data) {
             orao_treasury = new PublicKey(orao_network_data.data.slice(8, 40));
         }
     }
 
     // check if we have the whitelist plugin
-    let whitelist_mint = PROGRAM;
+    const whitelist_mint = PROGRAM;
     let whitelist_account = PROGRAM;
     let whitelist_token_program = PROGRAM;
 
-    let collectionPlugins = getCollectionPlugins(collectionData);
+    const collectionPlugins = getCollectionPlugins(collectionData);
 
     if (collectionPlugins.whitelistKey) {
-        let whitelist = await getMintData(connection, whitelist_mint.toString());
+        const whitelist = await getMintData(connection, whitelist_mint.toString());
         if (!whitelist) {
             toast.error("Whitelist mint not found");
             return null;
@@ -202,7 +202,7 @@ export const GetClaimNFTInstruction = async (connection: Connection, collectionD
 
     const instruction_data = serialise_claim_nft_instruction(Array.from(key_bytes));
 
-    var account_vector = [
+    const account_vector = [
         { pubkey: user, isSigner: true, isWritable: true },
         { pubkey: user_data_account, isSigner: false, isWritable: true },
 
