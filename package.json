@@ -31,7 +31,7 @@
         "@metaplex-foundation/umi-signer-wallet-adapters": "^0.9.2",
         "@solana/wallet-adapter-base": "^0.9.23",
         "@solana/wallet-adapter-react": "^0.15.35",
-        "@solana/web3.js": ">=1.0.0",
+        "@solana/web3.js": "^1.87.1",
         "@types/bn.js": "^5.1.5",
         "bn.js": "^5.2.1",
         "react": ">=16.8.0",
