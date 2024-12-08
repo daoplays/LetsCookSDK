@@ -28,7 +28,7 @@ class MintRandomNFT_Instruction {
     );
 }
 
-export const GetMintRandomInstruction = async (connection: Connection, collection: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
+export const GetMintRandomNFTInstruction = async (connection: Connection, collection: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
     if (collection === null) {
         return null;
     }

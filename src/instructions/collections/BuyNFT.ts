@@ -31,7 +31,7 @@ class BuyNFT_Instruction {
     );
 }
 
-export const GetBuyNFTInstructions = async (
+export const GetBuyNFTInstruction = async (
     connection: Connection,
     launchData: CollectionData,
     user: PublicKey,

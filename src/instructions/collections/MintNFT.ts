@@ -27,7 +27,7 @@ class MintNFTInstruction {
     );
 }
 
-export const GetMintRandomInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
+export const GetMintNFTInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
     if (collectionData === null) {
         //console.log("launch is null");
         return null;

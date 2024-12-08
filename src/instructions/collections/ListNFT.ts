@@ -30,7 +30,7 @@ class ListNFT_Instruction {
     );
 }
 
-export const GetListInstructions = async (launchData: CollectionData, user: PublicKey, asset_key: PublicKey, price: number) : Promise<TransactionInstruction | null> => {
+export const GetListNFTInstruction = async (launchData: CollectionData, user: PublicKey, asset_key: PublicKey, price: number) : Promise<TransactionInstruction | null> => {
     let program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
     let launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
