@@ -39,7 +39,7 @@ const useLaunch = (props: useLaunchProps) => {
             setError("No page name provided");
             return;
         }
-        return PublicKey.findProgramAddressSync([Buffer.from(pageName), Buffer.from("Launchs")], PROGRAM)[0];
+        return PublicKey.findProgramAddressSync([Buffer.from(pageName), Buffer.from("Launch")], PROGRAM)[0];
     }, [pageName]);
 
     const getJoinDataAccont = useCallback(() => {
