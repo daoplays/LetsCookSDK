@@ -3,7 +3,6 @@ import { bignum_to_num } from "../../utils";
 import { bignum } from "@metaplex-foundation/beet";
 import { LaunchData } from "./types";
 
-
 export interface LaunchPluginData {
     whitelistKey: PublicKey | null;
     whitelistAmount: bignum | null;

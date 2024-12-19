@@ -17,7 +17,6 @@ import {
 } from "@metaplex-foundation/beet";
 import { publicKey } from "@metaplex-foundation/beet-solana";
 
-
 type LaunchPluginEnum = {
     Whitelist: { key: PublicKey; amount: bignum; phase_end: bignum };
 };
@@ -58,8 +57,6 @@ const launchInfoBeet = dataEnum<LaunchMetaEnum>([
         ),
     ],
 ]) as FixableBeet<LaunchInfo>;
-
-
 
 export class LaunchData {
     constructor(
@@ -157,7 +154,6 @@ export class LaunchData {
         "LaunchData",
     );
 }
-
 
 export class JoinData {
     constructor(

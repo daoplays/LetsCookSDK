@@ -28,12 +28,19 @@ class MintRandomNFT_Instruction {
     );
 }
 
-export const GetMintRandomNFTInstruction = async (connection: Connection, collection: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
+export const GetMintRandomNFTInstruction = async (
+    connection: Connection,
+    collection: CollectionData,
+    user: PublicKey,
+): Promise<TransactionInstruction | null> => {
     if (collection === null) {
         return null;
     }
 
-    const launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(collection.page_name), Buffer.from("Collection")], PROGRAM)[0];
+    const launch_data_account = PublicKey.findProgramAddressSync(
+        [Buffer.from(collection.page_name), Buffer.from("Collection")],
+        PROGRAM,
+    )[0];
 
     const program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 

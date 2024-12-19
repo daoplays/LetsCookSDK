@@ -41,7 +41,7 @@ export const GetWrapNFTInstruction = async (
     user: PublicKey,
     asset_key: PublicKey | null,
     connection: Connection,
-) : Promise<TransactionInstruction | null> => {
+): Promise<TransactionInstruction | null> => {
     let wrapped_nft_key: PublicKey;
 
     if (asset_key === null) {
@@ -77,7 +77,10 @@ export const GetWrapNFTInstruction = async (
 
     const program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
-    const launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
+    const launch_data_account = PublicKey.findProgramAddressSync(
+        [Buffer.from(launchData.page_name), Buffer.from("Collection")],
+        PROGRAM,
+    )[0];
 
     const token_mint = launchData.keys[CollectionKeys.MintAddress];
 

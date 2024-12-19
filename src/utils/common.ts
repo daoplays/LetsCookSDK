@@ -1,7 +1,14 @@
 import { bignum } from "@metaplex-foundation/beet";
 import { Connection } from "@solana/web3.js";
 import BN from "bn.js";
-import { DevNetConfig, ECLIPSE_GENESIS, EclipseMainNetConfig, MainNetConfig, NetworkConfig, SOLANA_DEVNET_GENESIS } from "../components/constants";
+import {
+    DevNetConfig,
+    ECLIPSE_GENESIS,
+    EclipseMainNetConfig,
+    MainNetConfig,
+    NetworkConfig,
+    SOLANA_DEVNET_GENESIS,
+} from "../components/constants";
 
 export function bignum_to_num(bn: bignum): number {
     const value = new BN(bn).toNumber();

@@ -48,14 +48,10 @@ const useLaunch = (props: useLaunchProps) => {
             return;
         }
 
-        return PublicKey.findProgramAddressSync(
-                [user.toBytes(), Buffer.from(pageName), Buffer.from("Joiner")],
-                PROGRAM,
-            )[0];
+        return PublicKey.findProgramAddressSync([user.toBytes(), Buffer.from(pageName), Buffer.from("Joiner")], PROGRAM)[0];
     }, [pageName, user]);
 
     const fetchInitiaJoinData = useCallback(async () => {
-       
         const joinAccount = getJoinDataAccont();
 
         if (joinAccount) {
@@ -64,8 +60,8 @@ const useLaunch = (props: useLaunchProps) => {
             if (joinData) {
                 const [join] = JoinData.struct.deserialize(joinData.data);
                 setJoinData(join);
-            }   
-        }        
+            }
+        }
     }, [getJoinDataAccont, connection]);
 
     // Function to fetch the current assignment data
@@ -125,8 +121,6 @@ const useLaunch = (props: useLaunchProps) => {
         }
     }, [connection, pageName, getLaunchDataAccount, fetchInitiaJoinData]);
 
-
-
     // Callback function to handle account changes
     const handleAccountChange = useCallback((accountInfo: AccountInfo<Buffer>) => {
         const account_data = accountInfo.data;
@@ -180,7 +174,16 @@ const useLaunch = (props: useLaunchProps) => {
                 joinSubscriptionRef.current = null;
             }
         };
-    }, [connection, pageName, user, fetchInitialLaunchData, getLaunchDataAccount, getJoinDataAccont, fetchInitiaJoinData, handleAccountChange]);
+    }, [
+        connection,
+        pageName,
+        user,
+        fetchInitialLaunchData,
+        getLaunchDataAccount,
+        getJoinDataAccont,
+        fetchInitiaJoinData,
+        handleAccountChange,
+    ]);
 
     // Return the current token balance and any error message
     return { launch, listing, joinData, launchPlugins, tokenMint, whitelistMint, error };

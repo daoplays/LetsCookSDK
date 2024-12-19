@@ -101,7 +101,8 @@ const useCollection = (props: useCollectionProps) => {
 
             const output = input_amount - swap_fee;
 
-            const output_fee = transfer_fee_config === null ? 0 : Number(calculateFee(transfer_fee_config.newerTransferFee, BigInt(output)));
+            const output_fee =
+                transfer_fee_config === null ? 0 : Number(calculateFee(transfer_fee_config.newerTransferFee, BigInt(output)));
 
             const final_output = output - output_fee;
 

@@ -30,10 +30,18 @@ class UnlistNFT_Instruction {
     );
 }
 
-export const GetUnlistNFTInstruction = async (launchData: CollectionData, user: PublicKey, asset_key: PublicKey, index: number) : Promise<TransactionInstruction | null> => {
+export const GetUnlistNFTInstruction = async (
+    launchData: CollectionData,
+    user: PublicKey,
+    asset_key: PublicKey,
+    index: number,
+): Promise<TransactionInstruction | null> => {
     const program_sol_account = PublicKey.findProgramAddressSync([uInt32ToLEBytes(SOL_ACCOUNT_SEED)], PROGRAM)[0];
 
-    const launch_data_account = PublicKey.findProgramAddressSync([Buffer.from(launchData.page_name), Buffer.from("Collection")], PROGRAM)[0];
+    const launch_data_account = PublicKey.findProgramAddressSync(
+        [Buffer.from(launchData.page_name), Buffer.from("Collection")],
+        PROGRAM,
+    )[0];
     const listings_program = new PublicKey("288fPpF7XGk82Wth2XgyoF2A82YKryEyzL58txxt47kd");
     const listings_account = PublicKey.findProgramAddressSync([asset_key.toBytes(), Buffer.from("Listing")], listings_program)[0];
     const listings_summary_account = PublicKey.findProgramAddressSync(

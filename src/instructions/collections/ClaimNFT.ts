@@ -69,7 +69,11 @@ class ClaimNFT_Instruction {
     );
 }
 
-export const GetClaimNFTInstruction = async (connection: Connection, collectionData: CollectionData, user: PublicKey) : Promise<TransactionInstruction | null> => {
+export const GetClaimNFTInstruction = async (
+    connection: Connection,
+    collectionData: CollectionData,
+    user: PublicKey,
+): Promise<TransactionInstruction | null> => {
     const nft_assignment_account = PublicKey.findProgramAddressSync(
         [user.toBytes(), collectionData.keys[CollectionKeys.CollectionMint].toBytes(), Buffer.from("assignment")],
         PROGRAM,

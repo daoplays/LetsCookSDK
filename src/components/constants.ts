@@ -16,7 +16,7 @@ export const DATA_ACCOUNT_SEED = 7571427;
 
 // genesis hashes for determining network
 export const ECLIPSE_GENESIS = "EAQLJCV2mh23BsK2P9oYpV5CHVLDNHTxYss3URrNmg3s";
-export const SOLANA_DEVNET_GENESIS = "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG"
+export const SOLANA_DEVNET_GENESIS = "EtWTRABZaYq6iMfeYKouRu166VU2xqa1wcaWoxPkrZBG";
 
 export interface NetworkConfig {
     PROD: boolean;

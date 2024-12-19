@@ -1,16 +1,6 @@
 import { PublicKey } from "@solana/web3.js";
-import {
-    FixableBeetStruct,
-    u8,
-    u32,
-    u64,
-    bignum,
-    utf8String,
-    array,
-} from "@metaplex-foundation/beet";
+import { FixableBeetStruct, u8, u32, u64, bignum, utf8String, array } from "@metaplex-foundation/beet";
 import { publicKey } from "@metaplex-foundation/beet-solana";
-
-
 
 export class ListingData {
     constructor(
