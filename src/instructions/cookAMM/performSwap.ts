@@ -35,7 +35,7 @@ class PerformSwap_Instruction {
     );
 }
 
-export function serialise_PerformSwap_Instruction(side: number, in_amount: bignum, jup_data: number[]): Buffer {
+function serialise_PerformSwap_Instruction(side: number, in_amount: bignum, jup_data: number[]): Buffer {
     const data = new PerformSwap_Instruction(LaunchInstruction.place_market_order, side, in_amount, jup_data);
     const [buf] = PerformSwap_Instruction.struct.serialize(data);
 
